@@ -12,7 +12,12 @@ app.use(express.json());
 //but kya files ke ath interact krne ke liytr kch hia ? nhi so  ab iske liye hme install krna pdega ek external package =>
 // express file upload naam se  ya fir ek dusra multer 
 const fileupload = require('express-fileupload');
-app.use(fileupload());
+app.use(fileupload( {
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+    }
+   
+));
 
 
 

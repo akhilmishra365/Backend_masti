@@ -3,11 +3,12 @@ const router = express.Router();
 
 const {
     
-    localFileUpload
+    localFileUpload,imageUpload
 }  = require("../controllers/fileUpload")
 
 //api route 
 router.post("/localFileUpload" ,localFileUpload)
+router.post("/imageUpload" ,imageUpload)
 
 
 

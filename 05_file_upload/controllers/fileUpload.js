@@ -1,4 +1,5 @@
 const File = require("../models/File") ; 
+const Cloudinary = require("cloudinary").v2; 
 
 //localfileupload -> handler function 
 
@@ -23,6 +24,79 @@ exports.localFileUpload = async(req,res) => {
 
 
     } catch (error) {
+        console.log("Not able to upload the file ");
+        console.log("error");
         
     }
 }
+
+function isfileTypeSupported (type , supportedTypes) {
+        return supportedTypes.includes(type);
+}
+
+//fucntion for uploading filse to cloudinary ; 
+
+async function uploadFileToCloudinary (file,folder) {
+  
+    
+   const options = {folder}
+   //from cloudinary documentatiom 
+   return await Cloudinary.uploader.upload(file.tempFilePath ,options) ; 
+
+}
+
+
+
+
+exports.imageUpload = async(req, res) =>{
+    try {
+        const{name,tags,email} = req.body
+        console.log(name,tags,email)
+
+//ye jo imagefile hai ye file ki key hai jo ki hmne request me send ki hai 
+        const file = req.files.imageFile;
+        
+
+        const supportedTypes = ["jpg" , "jpeg" , "png"];
+        const fileType = file.name.split('.')[1].toLowerCase() ;
+
+
+        if(!isfileTypeSupported(fileType,supportedTypes))
+        {
+            return res.status(400).json({
+                success:false,
+                message:"File Format not Supported "
+            })
+        }
+
+        //file formAT SUPPORTED 
+
+        const response = await uploadFileToCloudinary(file , "CloudUpload");
+        console.log(response) ; 
+
+        //db me entry save krni hia 
+        const fileData = File.create({
+            name,
+            tags, 
+            email,
+            imageUrl : response.secure_url,
+
+
+        })
+
+        res.json({
+            success:true,
+            imageUrl : response.secure_url,
+            message:'Image Successfully Uploaded', 
+        })
+
+    } catch (error) {
+        console.error(error) 
+        res.status(400).json({
+            success:false,
+            message:'Something went wrong '
+        })
+        
+    }
+}
+
