@@ -10,6 +10,8 @@ app.use(express.json());
 
 const routes  =  require('./route/blogRoutes');
 
+
+//MIDDLE WARE
 app.use('/api/v1/', routes);
 
 
