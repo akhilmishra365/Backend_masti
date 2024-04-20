@@ -1,7 +1,5 @@
-const { configDotenv } = require("dotenv");
 const mongoose = require ("mongoose");
-const nodemailer = require("nodemailer");
-require("dotenv").config();
+const nodemailer = require("nodemailer") ; 
 
 const fileSchema =  new mongoose.Schema({
     name:{
@@ -20,6 +18,7 @@ const fileSchema =  new mongoose.Schema({
     }
 
 }) ; 
+
 
 
 //Post middleware and pre middleware of mongoose is used to send mails read about them  in mongoose documentation 
@@ -62,6 +61,29 @@ console.log(info) ;
     }
 
 })
+
+
+
+const File = mongoose.model("File" , fileSchema);
+module.exports = File ; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
